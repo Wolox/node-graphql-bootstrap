@@ -1,20 +1,9 @@
-const { ApolloServer, gql } = require('apollo-server'),
+const { ApolloServer } = require('apollo-server'),
+  typeDefs = require('./types'),
   users = require('./users');
 
 module.exports = new ApolloServer({
-  typeDefs: gql`
-    type User {
-      name: String!
-    }
-
-    type Mutation {
-      show(name: String!): String!
-    }
-
-    type Query {
-      view(name: String!): String
-    }
-  `,
+  typeDefs,
   resolvers: {
     Query: {
       ...users.queries
