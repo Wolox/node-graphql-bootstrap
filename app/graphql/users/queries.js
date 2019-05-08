@@ -1,3 +1,5 @@
+const { user: User } = require('../../models');
+
 module.exports = {
-  view: (_, { name }) => name
+  user: (_, params) => User.getOne(params)
 };
