@@ -1,7 +1,7 @@
-const server = require('./app'),
-  // migrationsManager = require('./migrations'),
-  config = require('./config'),
-  logger = require('./app/logger');
+// migrationsManager = require('./migrations'),
+const config = require('./config'),
+  logger = require('./app/logger'),
+  server = require('./app/graphql');
 
 const port = config.common.api.port || 8080;
 
