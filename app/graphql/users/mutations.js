@@ -1,5 +1,13 @@
-const { user: User } = require('../../models');
+const { gql } = require('apollo-server'),
+  { user: User } = require('../../models');
 
 module.exports = {
-  createUser: (_, { user }) => User.createModel(user)
+  mutations: {
+    createUser: (_, { user }) => User.createModel(user)
+  },
+  schema: gql`
+    extend type Mutation {
+      createUser(user: UserInput!): User!
+    }
+  `
 };

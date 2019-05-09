@@ -59,6 +59,7 @@
     "apollo-server": "^2.4.8",
     "cors": "^2.8.4",
     "graphql": "^14.2.1",
+    "graphql-tools": "^4.0.4",
     "jwt-simple": "^0.5.1",
     "pg": "^7.4.1",
     "rollbar": "^2.3.9",
