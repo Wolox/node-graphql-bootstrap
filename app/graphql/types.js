@@ -24,5 +24,6 @@ module.exports = gql`
 
   type Query {
     user(id: ID, firstName: String, email: String): User!
+    healthCheck: String
   }
 `;
