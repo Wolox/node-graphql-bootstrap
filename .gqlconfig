@@ -1,0 +1,17 @@
+{
+  schema: {
+    "files": "schemas/**/*.gql"
+  },
+  query: {
+    files: [
+      {
+        match: { include: 'app/graphql/**/*.js' },
+        parser: [ 'EmbeddedQueryParser', { startTag: 'queries`', endTag: '`' } ],
+      },
+      {
+        match: { include: 'app/graphql/**/*.js' },
+        parser: [ 'EmbeddedQueryParser', { startTag: 'mutations`', endTag: '`' } ],
+      },
+    ]
+  }
+}

@@ -69,6 +69,7 @@
     "winston-daily-rotate-file": "^1.7.2"
   },
   "devDependencies": {
+    "@playlyfe/gql": "^2.6.1",
     "babel": "6.23.0",
     "babel-core": "6.26.0",
     "babel-eslint": "^8.2.2",
