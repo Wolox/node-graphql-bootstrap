@@ -1,10 +1,11 @@
 const { ApolloServer } = require('apollo-server'),
   { makeExecutableSchema } = require('graphql-tools'),
-  typeDef = require('./types'),
+  types = require('./types'),
+  inputs = require('./inputs'),
   users = require('./users'),
   healthCheck = require('./healthCheck');
 
-const typeDefs = [typeDef, ...users.schemas, ...healthCheck.schemas];
+const typeDefs = [types, inputs, ...users.schemas, ...healthCheck.schemas];
 
 module.exports = new ApolloServer({
   schema: makeExecutableSchema({
