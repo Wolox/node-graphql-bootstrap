@@ -1,14 +1,12 @@
-const { gql } = require('apollo-server');
+const { queries } = require('../utils');
 
 module.exports = {
   queries: {
     healthCheck: () => process.uptime()
   },
   schemas: [
-    gql`
-      extend type Query {
+    queries`
         healthCheck: String!
-      }
     `
   ]
 };
