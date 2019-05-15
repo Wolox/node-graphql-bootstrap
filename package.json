@@ -58,15 +58,14 @@
   "dependencies": {
     "apollo-server": "^2.4.8",
     "cors": "^2.8.4",
+    "express-wolox-logger": "0.0.1",
     "graphql": "^14.2.1",
     "graphql-tools": "^4.0.4",
     "jwt-simple": "^0.5.1",
     "pg": "^7.4.1",
     "rollbar": "^2.3.9",
     "sequelize": "^4.44.0",
-    "umzug": "^2.1.0",
-    "winston": "^2.4.0",
-    "winston-daily-rotate-file": "^1.7.2"
+    "umzug": "^2.1.0"
   },
   "devDependencies": {
     "babel": "6.23.0",
