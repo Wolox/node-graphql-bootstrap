@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server'),
-  { userLoggedIn } = require('../messages'),
+  { userLoggedIn } = require('../events'),
   { user: User } = require('../../models');
 
 module.exports = {
