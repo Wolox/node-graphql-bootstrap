@@ -17,6 +17,9 @@ module.exports = new ApolloServer({
       },
       Mutation: {
         ...users.mutations
+      },
+      Subscription: {
+        ...users.subscriptions
       }
     }
   })
