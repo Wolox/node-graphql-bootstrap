@@ -1,8 +1,10 @@
 const { queries, schema: queriesSchema } = require('./queries'),
-  { mutations, schema: mutationSchema } = require('./mutations');
+  { mutations, schema: mutationSchema } = require('./mutations'),
+  { subscriptions, schema: subscriptionsSchema } = require('./subscriptions');
 
 module.exports = {
   queries,
   mutations,
-  schemas: [queriesSchema, mutationSchema]
+  subscriptions,
+  schemas: [queriesSchema, mutationSchema, subscriptionsSchema]
 };

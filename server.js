@@ -13,8 +13,9 @@ migrationsManager
       enabled: !!config.common.rollbar.accessToken,
       environment: config.common.rollbar.environment || config.environment
     }); */
-    server.listen(port).then(({ url }) => {
+    server.listen(port).then(({ url, subscriptionsUrl }) => {
       logger.info(`🚀 Server ready at ${url}`);
+      logger.info(`🚀 Subscriptions ready at ${subscriptionsUrl}`);
     })
   )
   .catch(logger.error);
