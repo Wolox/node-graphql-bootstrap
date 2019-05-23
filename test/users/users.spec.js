@@ -1,23 +1,22 @@
 const { query } = require('../server.spec'),
-  { getUser } = require('./graphql');
+  { getUser } = require('./graphql'),
+  { create } = require('./factory');
 
 describe('users', () => {
   describe('queries', () => {
-    it('should fail if authorization header is missing', done => {
-      query({ query: getUser(1) })
-        .then(res => {
-          console.log(res);
-          expect(res.data).toBe({
-            data: {
-              user: {
-                firstName: 'gonza',
-                lastName: 'esc',
-                email: 'gonzalo.escandarani@wolox.com.ar'
-              }
+    it('should get user properly', done => {
+      create().then(user => {
+        query({ query: getUser(user.id) }).then(res => {
+          expect(res.data).toEqual({
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email
             }
           });
-        })
-        .then(() => done());
+          done();
+        });
+      });
     });
   });
 });
