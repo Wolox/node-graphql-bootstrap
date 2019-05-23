@@ -4,8 +4,8 @@ const { query } = require('../server.spec'),
 
 describe('users', () => {
   describe('queries', () => {
-    it('should get user properly', done => {
-      create().then(user => {
+    it('should get user properly', () =>
+      create().then(user =>
         query({ query: getUser(user.id) }).then(res => {
           expect(res.data).toEqual({
             user: {
@@ -14,9 +14,7 @@ describe('users', () => {
               email: user.email
             }
           });
-          done();
-        });
-      });
-    });
+        })
+      ));
   });
 });

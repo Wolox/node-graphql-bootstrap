@@ -15,6 +15,9 @@ module.exports = makeExecutableSchema({
     },
     Mutation: {
       ...users.mutations
+    },
+    Subscription: {
+      ...users.subscriptions
     }
   }
 });
