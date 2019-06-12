@@ -48,9 +48,7 @@ describe('users', () => {
         mutation,
         operationName: 'createUser',
         variables: { id: 1, email: 'nancy@foo.co' }
-      })
-        .then(res => console.log(res, '<<<<<<>>>>>>'))
-        .catch(err => console.log(err, '<<<<<<<<<<<<<>>>>>>>>>>>>>>'));
+      });
     });
   });
 });
