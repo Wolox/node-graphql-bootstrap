@@ -9,4 +9,14 @@ const getUser = id => gql`
         }
       }`;
 
-module.exports = { getUser };
+const getUsers = () => gql`
+  query {
+    users {
+      firstName
+      lastName
+      email
+    }
+  }
+`;
+
+module.exports = { getUser, getUsers };
