@@ -13,5 +13,6 @@ factory.define('user', User, {
 
 module.exports = {
   create: params => factory.create('user', params),
-  createMany: () => factory.createMany('user', 5)
+  createMany: () => factory.createMany('user', 5),
+  build: params => factory.build('user', params)
 };
