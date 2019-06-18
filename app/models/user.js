@@ -33,6 +33,8 @@ module.exports = (sequelize, DataTypes) => {
 
   User.getOne = user => User.findOne({ where: user });
 
+  User.getAll = () => User.findAll();
+
   User.getByUsername = username => User.getOne({ username });
 
   User.prototype.updateModel = props => this.update(props);
