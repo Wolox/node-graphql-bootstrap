@@ -1,7 +1,7 @@
 const { query, mutate } = require('../server.spec'),
-  { getUser, getUsers } = require('./graphql'),
+  { getUser, getUsers, createUser } = require('./graphql'),
   userFactory = require('../factories/user'),
-  mutations = require('../../app/graphql/users/mutations');
+  { mutations } = require('../../app/graphql/users/mutations');
 
 describe('users', () => {
   describe('queries', () => {
@@ -37,20 +37,25 @@ describe('users', () => {
   });
 
   describe('mutations', () => {
-    it('should create an user successfuly', () => {
-      mutate({
-        mutation: mutations.schema,
-        operationName: 'createUser',
-        variables: { id: 1, email: 'nancy@foo.co' }
-      });
-    });
+    it('should create an user successfuly', () =>
+      userFactory.attributes().then(user =>
+        mutate(createUser(user)).then(res => {
+          const { firstName, lastName, email, password, username, id } = res.data.createUser;
+          expect(firstName).toEqual(user.firstName);
+          expect(lastName).toEqual(user.lastName);
+          expect(email).toEqual(user.email);
+          expect(password).toEqual(user.password);
+          expect(username).toEqual(user.username);
+          expect(id).toBeDefined();
+        })
+      ));
   });
 
   describe('resolvers', () => {
     describe('createUser', () => {
       it('should create an user successfuly', async () => {
         const user = await userFactory.build();
-        mutations.mutations.createUser({}, { user: user.dataValues }).then(res => {
+        mutations.createUser({}, { user: user.dataValues }).then(res => {
           expect(res.dataValues).toHaveProperty('id');
           expect(res.dataValues).toHaveProperty('firstName');
           expect(res.dataValues).toHaveProperty('lastName');
@@ -63,7 +68,7 @@ describe('users', () => {
       });
 
       it('should fail to create an user with malformed parameters', () => {
-        mutations.mutations.createUser({}, { user: { a: 'b' } }).catch(err => {
+        mutations.createUser({}, { user: { a: 'b' } }).catch(err => {
           expect(typeof err.errors).toBe('object');
           expect(err.errors).toHaveLength();
         });
