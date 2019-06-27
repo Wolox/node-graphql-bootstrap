@@ -1,6 +1,10 @@
-# graphql
+# Graphql Bootstrap
 
-graphql
+## Structure 
+
+
+
+
 
 ## First steps
 
