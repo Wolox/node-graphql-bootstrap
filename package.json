@@ -60,6 +60,7 @@
     "cors": "^2.8.4",
     "express-wolox-logger": "0.0.1",
     "graphql": "^14.2.1",
+    "graphql-middleware": "^3.0.2",
     "graphql-tools": "^4.0.4",
     "jwt-simple": "^0.5.1",
     "pg": "^7.4.1",

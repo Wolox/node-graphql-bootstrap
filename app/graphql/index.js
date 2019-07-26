@@ -1,4 +1,5 @@
 const { makeExecutableSchema } = require('graphql-tools'),
+  { applyMiddleware } = require('graphql-middleware'),
   types = require('./types'),
   inputs = require('./inputs'),
   users = require('./users'),
@@ -6,7 +7,7 @@ const { makeExecutableSchema } = require('graphql-tools'),
 
 const typeDefs = [types, inputs, ...users.schemas, ...healthCheck.schemas];
 
-module.exports = makeExecutableSchema({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
@@ -20,4 +21,8 @@ module.exports = makeExecutableSchema({
       ...users.subscriptions
     }
   }
+});
+
+module.exports = applyMiddleware(schema, {
+  Mutation: {}
 });
