@@ -24,5 +24,7 @@ const schema = makeExecutableSchema({
 });
 
 module.exports = applyMiddleware(schema, {
-  Mutation: {}
+  Mutation: {
+    ...users.middlewares.mutations
+  }
 });
