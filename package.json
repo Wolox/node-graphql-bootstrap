@@ -58,7 +58,7 @@
   "dependencies": {
     "apollo-server": "^2.4.8",
     "cors": "^2.8.4",
-    "express-wolox-logger": "0.0.1",
+    "express-wolox-logger": "^1.0.0",
     "graphql": "^14.2.1",
     "graphql-tools": "^4.0.4",
     "jwt-simple": "^0.5.1",
