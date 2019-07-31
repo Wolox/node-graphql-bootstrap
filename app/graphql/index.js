@@ -1,12 +1,13 @@
 const { makeExecutableSchema } = require('graphql-tools'),
+  { applyMiddleware } = require('graphql-middleware'),
   fs = require('fs'),
   path = require('path');
 
 const importEverything = () => {
-  const imports = { folders: [] };
+  const imports = { modules: [] };
   fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
     if (dirent.isDirectory()) {
-      imports.folders.push({ [dirent.name]: require(path.join(__dirname, dirent.name)) });
+      imports.modules.push({ [dirent.name]: require(path.join(__dirname, dirent.name)) });
     } else if (dirent.name === 'index.js') {
       return;
     }
@@ -15,23 +16,30 @@ const importEverything = () => {
   return imports;
 };
 
-const { types, inputs, enums: Enums, folders: kinArray } = importEverything();
+const { types, inputs, enums: Enums, modules } = importEverything();
 
 const getSchemas = () =>
-  kinArray.reduce((schemas, currentKin) => {
-    const kinName = Object.keys(currentKin);
-    schemas.push(...currentKin[kinName].schemas);
+  modules.reduce((schemas, currentModule) => {
+    const moduleName = Object.keys(currentModule);
+    schemas.push(...currentModule[moduleName].schemas);
     return schemas;
   }, []);
 
 const getResolvers = resolverType =>
-  kinArray.reduce((resolvers, currentKin) => {
-    const kinName = Object.keys(currentKin);
-    const elements = currentKin[kinName];
+  modules.reduce((resolvers, currentModule) => {
+    const moduleName = Object.keys(currentModule);
+    const elements = currentModule[moduleName];
     return { ...resolvers, ...elements[resolverType] };
   }, {});
 
-module.exports = makeExecutableSchema({
+const getMiddlewares = middlewareType =>
+  modules.reduce((middlewares, currentModule) => {
+    const moduleName = Object.keys(currentModule);
+    const elements = currentModule[moduleName].middlewares;
+    return elements ? { ...middlewares, ...elements[middlewareType] } : { ...middlewares };
+  }, {});
+
+const schema = makeExecutableSchema({
   typeDefs: [types, inputs, ...getSchemas()],
   resolvers: {
     Query: {
@@ -43,6 +51,14 @@ module.exports = makeExecutableSchema({
     Subscription: {
       ...getResolvers('subscriptions')
     },
-    ...Enums
+    ...Enums,
+    ...getResolvers('fieldResolvers')
   }
+});
+
+module.exports = applyMiddleware(schema, {
+  Query: { ...getMiddlewares('queries') },
+  Mutation: { ...getMiddlewares('mutations') },
+  Subscription: { ...getMiddlewares('subscriptions') },
+  ...getMiddlewares('fieldMiddlewares')
 });
