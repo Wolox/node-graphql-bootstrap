@@ -1,23 +1,48 @@
 const { makeExecutableSchema } = require('graphql-tools'),
-  types = require('./types'),
-  inputs = require('./inputs'),
-  users = require('./users'),
-  healthCheck = require('./healthCheck');
+  fs = require('fs'),
+  path = require('path');
 
-const typeDefs = [types, inputs, ...users.schemas, ...healthCheck.schemas];
+const importEverything = () => {
+  const imports = { folders: [] };
+  fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
+    if (dirent.isDirectory()) {
+      imports.folders.push({ [dirent.name]: require(path.join(__dirname, dirent.name)) });
+    } else if (dirent.name === 'index.js') {
+      return;
+    }
+    imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
+  });
+  return imports;
+};
+
+const { types, inputs, enums: Enums, folders: kinArray } = importEverything();
+
+const getSchemas = () =>
+  kinArray.reduce((schemas, currentKin) => {
+    const kinName = Object.keys(currentKin);
+    schemas.push(...currentKin[kinName].schemas);
+    return schemas;
+  }, []);
+
+const getResolvers = resolverType =>
+  kinArray.reduce((resolvers, currentKin) => {
+    const kinName = Object.keys(currentKin);
+    const elements = currentKin[kinName];
+    return { ...resolvers, ...elements[resolverType] };
+  }, {});
 
 module.exports = makeExecutableSchema({
-  typeDefs,
+  typeDefs: [types, inputs, ...getSchemas()],
   resolvers: {
     Query: {
-      ...users.queries,
-      ...healthCheck.queries
+      ...getResolvers('queries')
     },
     Mutation: {
-      ...users.mutations
+      ...getResolvers('mutations')
     },
     Subscription: {
-      ...users.subscriptions
-    }
+      ...getResolvers('subscriptions')
+    },
+    ...Enums
   }
 });
