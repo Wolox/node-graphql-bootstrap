@@ -3,16 +3,17 @@ const { makeExecutableSchema } = require('graphql-tools'),
   fs = require('fs'),
   path = require('path');
 
-const importEverything = () => {
-  const imports = { modules: [] };
-  fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
-    if (dirent.isDirectory()) {
-      imports.modules.push({ ...require(path.join(__dirname, dirent.name)) });
-    }
-    imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
-  });
-  return imports;
-};
+const importEverything = () =>
+  fs.readdirSync(__dirname, { withFileTypes: true }).reduce(
+    (imports, dirent) => {
+      if (dirent.isDirectory()) {
+        imports.modules.push({ ...require(path.join(__dirname, dirent.name)) });
+      }
+      imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
+      return imports;
+    },
+    { modules: [] }
+  );
 
 const { types, inputs, enums, modules } = importEverything();
 
@@ -20,7 +21,7 @@ const destructureModules = () => {
   const rootObject = { Query: {}, Mutation: {}, Subscription: {} };
   return modules.reduce(
     (destructuredModules, currentModule) => {
-      destructuredModules.schemas = [...destructuredModules.schemas, ...currentModule.schemas];
+      destructuredModules.schemas.push(...currentModule.schemas);
 
       destructuredModules.resolvers = {
         ...destructuredModules.resolvers,
@@ -64,6 +65,7 @@ const destructureModules = () => {
 };
 
 const destructuredModules = destructureModules();
+
 const schema = makeExecutableSchema({
   typeDefs: [types, inputs, ...destructuredModules.schemas],
   resolvers: {
