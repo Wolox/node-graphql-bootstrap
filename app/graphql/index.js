@@ -7,58 +7,71 @@ const importEverything = () => {
   const imports = { modules: [] };
   fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
     if (dirent.isDirectory()) {
-      imports.modules.push({ [dirent.name]: require(path.join(__dirname, dirent.name)) });
-    } else if (dirent.name === 'index.js') {
-      return;
+      imports.modules.push({ ...require(path.join(__dirname, dirent.name)) });
     }
     imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
   });
   return imports;
 };
 
-const { types, inputs, enums: Enums, modules } = importEverything();
+const { types, inputs, enums, modules } = importEverything();
 
-const getSchemas = () =>
-  modules.reduce((schemas, currentModule) => {
-    const moduleName = Object.keys(currentModule);
-    schemas.push(...currentModule[moduleName].schemas);
-    return schemas;
-  }, []);
+const destructureModules = () => {
+  const rootObject = { Query: {}, Mutation: {}, Subscription: {} };
+  return modules.reduce(
+    (destructuredModules, currentModule) => {
+      destructuredModules.schemas = [...destructuredModules.schemas, ...currentModule.schemas];
 
-const getResolvers = resolverType =>
-  modules.reduce((resolvers, currentModule) => {
-    const moduleName = Object.keys(currentModule);
-    const elements = currentModule[moduleName];
-    return { ...resolvers, ...elements[resolverType] };
-  }, {});
+      destructuredModules.resolvers = {
+        ...destructuredModules.resolvers,
+        Query: {
+          ...destructuredModules.resolvers.Query,
+          ...currentModule.queries
+        },
+        Mutation: {
+          ...destructuredModules.resolvers.Mutation,
+          ...currentModule.mutations
+        },
+        Subscription: {
+          ...destructuredModules.resolvers.Subscription,
+          ...currentModule.subscriptions
+        },
+        ...currentModule.fieldResolvers
+      };
 
-const getMiddlewares = middlewareType =>
-  modules.reduce((middlewares, currentModule) => {
-    const moduleName = Object.keys(currentModule);
-    const elements = currentModule[moduleName].middlewares;
-    return elements ? { ...middlewares, ...elements[middlewareType] } : { ...middlewares };
-  }, {});
+      if (currentModule.middlewares) {
+        destructuredModules.middlewares = {
+          ...destructuredModules.middlewares,
+          Query: {
+            ...destructuredModules.middlewares.Query,
+            ...currentModule.middlewares.queries
+          },
+          Mutation: {
+            ...destructuredModules.middlewares.Mutation,
+            ...currentModule.middlewares.mutations
+          },
+          Subscription: {
+            ...destructuredModules.middlewares.Subscription,
+            ...currentModule.middlewares.subscriptions
+          },
+          ...currentModule.middlewares.fieldMiddlewares
+        };
+      }
+      return destructuredModules;
+    },
+    { schemas: [], resolvers: rootObject, middlewares: rootObject }
+  );
+};
 
+const destructuredModules = destructureModules();
 const schema = makeExecutableSchema({
-  typeDefs: [types, inputs, ...getSchemas()],
+  typeDefs: [types, inputs, ...destructuredModules.schemas],
   resolvers: {
-    Query: {
-      ...getResolvers('queries')
-    },
-    Mutation: {
-      ...getResolvers('mutations')
-    },
-    Subscription: {
-      ...getResolvers('subscriptions')
-    },
-    ...Enums,
-    ...getResolvers('fieldResolvers')
+    ...destructuredModules.resolvers,
+    ...enums
   }
 });
 
 module.exports = applyMiddleware(schema, {
-  Query: { ...getMiddlewares('queries') },
-  Mutation: { ...getMiddlewares('mutations') },
-  Subscription: { ...getMiddlewares('subscriptions') },
-  ...getMiddlewares('fieldMiddlewares')
+  ...destructuredModules.middlewares
 });
