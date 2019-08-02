@@ -7,7 +7,20 @@ const importEverything = () =>
   fs.readdirSync(__dirname, { withFileTypes: true }).reduce(
     (imports, dirent) => {
       if (dirent.isDirectory()) {
-        imports.modules.push({ ...require(path.join(__dirname, dirent.name)) });
+        const index = fs.readdirSync(path.join(__dirname, dirent.name)).reduce(
+          (singleModule, file) => {
+            const fileName = file.replace(/.js/gi, '');
+            const definitions = require(path.join(__dirname, dirent.name, fileName));
+            singleModule[fileName] = definitions[fileName] ? definitions[fileName] : definitions;
+            if (definitions.schema) {
+              singleModule.schemas.push(definitions.schema);
+            }
+            return singleModule;
+          },
+          { schemas: [] }
+        );
+        imports.modules.push(index);
+        return imports;
       }
       imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
       return imports;
@@ -23,6 +36,7 @@ const destructureModules = () => {
     (destructuredModules, currentModule) => {
       destructuredModules.schemas.push(...currentModule.schemas);
 
+      const { fieldResolvers } = currentModule.resolvers ? currentModule.resolvers : {};
       destructuredModules.resolvers = {
         ...destructuredModules.resolvers,
         Query: {
@@ -37,7 +51,7 @@ const destructureModules = () => {
           ...destructuredModules.resolvers.Subscription,
           ...currentModule.subscriptions
         },
-        ...currentModule.fieldResolvers
+        ...fieldResolvers
       };
 
       if (currentModule.middlewares) {
@@ -65,6 +79,7 @@ const destructureModules = () => {
 };
 
 const destructuredModules = destructureModules();
+console.log(destructuredModules);
 
 const schema = makeExecutableSchema({
   typeDefs: [types, inputs, ...destructuredModules.schemas],

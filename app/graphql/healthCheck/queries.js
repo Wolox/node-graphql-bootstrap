@@ -4,11 +4,9 @@ module.exports = {
   queries: {
     healthCheck: () => process.uptime()
   },
-  schemas: [
-    gql`
-      extend type Query {
-        healthCheck: String!
-      }
-    `
-  ]
+  schema: gql`
+    extend type Query {
+      healthCheck: String!
+    }
+  `
 };
