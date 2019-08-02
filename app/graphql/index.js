@@ -79,7 +79,6 @@ const destructureModules = () => {
 };
 
 const destructuredModules = destructureModules();
-console.log(destructuredModules);
 
 const schema = makeExecutableSchema({
   typeDefs: [types, inputs, ...destructuredModules.schemas],
