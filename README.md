@@ -5,21 +5,24 @@ graphql
 ## Usage
 
 This bootstrap operates under the following structure for implementing the ```graphql``` schema modularly:
+
 - app/graphql/
-    >index.js
-    >scripts.js
-    >types.js
-    >inputs.js
-    >module1
-    >module2
-    >...modulex
+  + index.js
+  + scripts.js
+  + types.js
+  + inputs.js
+  + module1
+  + module2
+  + ...modulex
+
 Each module should be a folder containing the following files if needed:
-- app/graphql/modulex
-    >queries.js
-    >mutations.js
-    >subscriptions.js
-    >resolvers.js (in this file you must export the `fieldResolvers` object if you want to use field resolvers)
-    >middlewares.js
+
+- app/graphql/modulex/
+  + queries.js
+  + mutations.js
+  + subscriptions.js
+  + resolvers.js (in this file you must export the `fieldResolvers` object if you want to use field resolvers)
+  + middlewares.js
 
 ## First steps
 
