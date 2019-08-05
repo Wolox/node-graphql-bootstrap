@@ -1,7 +1,10 @@
 const fs = require('fs'),
   path = require('path');
 
-exports.generateIndex = dirent =>
+const INDEX_FILE = 'index.js',
+  SCRIPTS_FILE = 'scripts.js';
+
+const generateIndex = dirent =>
   fs.readdirSync(path.join(__dirname, dirent.name)).reduce(
     (singleModule, file) => {
       const fileName = file.replace(/.js/gi, '');
@@ -13,6 +16,22 @@ exports.generateIndex = dirent =>
       return singleModule;
     },
     { schemas: [] }
+  );
+
+exports.importEverything = () =>
+  fs.readdirSync(__dirname, { withFileTypes: true }).reduce(
+    (imports, dirent) => {
+      if (dirent.isDirectory()) {
+        const index = generateIndex(dirent);
+        imports.modules.push(index);
+        return imports;
+      } else if (dirent.name === INDEX_FILE || dirent.name === SCRIPTS_FILE) {
+        return imports;
+      }
+      imports[dirent.name.replace(/.js/gi, '')] = require(path.join(__dirname, dirent.name));
+      return imports;
+    },
+    { modules: [] }
   );
 
 exports.destructureModules = modules => {
