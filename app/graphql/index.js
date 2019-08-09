@@ -1,19 +1,23 @@
 const { makeExecutableSchema } = require('graphql-tools'),
   { applyMiddleware } = require('graphql-middleware'),
-  { importEverything, destructureModules } = require('./scripts');
+  { gql } = require('apollo-server'),
+  { importEverything } = require('./scripts');
 
-const { types, inputs, enums, modules } = importEverything();
+const modules = importEverything();
 
-const destructuredModules = destructureModules(modules);
+console.log(modules);
 
+const rootTypeDefinition = gql`
+  type Query
+  type Mutation
+  type Subscription
+`;
+const typeDefs = [rootTypeDefinition, ...modules.schemas];
 const schema = makeExecutableSchema({
-  typeDefs: [types, inputs, ...destructuredModules.schemas],
-  resolvers: {
-    ...destructuredModules.resolvers,
-    ...enums
-  }
+  typeDefs,
+  resolvers: modules.resolvers
 });
 
 module.exports = applyMiddleware(schema, {
-  ...destructuredModules.middlewares
+  ...modules.middlewares
 });
