@@ -5,8 +5,6 @@ const { makeExecutableSchema } = require('graphql-tools'),
 
 const modules = importEverything();
 
-console.log(modules);
-
 const rootTypeDefinition = gql`
   type Query
   type Mutation
