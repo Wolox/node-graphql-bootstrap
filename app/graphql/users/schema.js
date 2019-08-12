@@ -44,6 +44,11 @@ const inputTypes = gql`
   }
 `;
 
-// const enums = gql``;
+/* const enums = gql`
+  enum UserRoleEnum {
+    STANDARD
+    ADMIN
+  }
+`;*/
 
-exports.schemas = [rootTypes, customTypes, inputTypes];
+exports.typeDefs = [rootTypes, customTypes, inputTypes];

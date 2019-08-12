@@ -10,7 +10,7 @@ const rootTypeDefinition = gql`
   type Mutation
   type Subscription
 `;
-const typeDefs = [rootTypeDefinition, ...modules.schemas];
+const typeDefs = [rootTypeDefinition, ...modules.typeDefs];
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers: modules.resolvers

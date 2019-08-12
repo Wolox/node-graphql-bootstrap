@@ -2,21 +2,25 @@ const fs = require('fs'),
   path = require('path'),
   merge = require('lodash.merge');
 
+const SCHEMA = 'schema';
+const RESOLVERS = 'resolvers';
+const MIDDLEWARES = 'middlewares';
+
 exports.importEverything = () =>
   fs.readdirSync(__dirname, { withFileTypes: true }).reduce(
     (imports, dirent) => {
       if (dirent.isDirectory()) {
         fs.readdirSync(path.join(__dirname, dirent.name)).forEach(file => {
           const fileName = file.replace(/.js/gi, '');
-          if (fileName === 'schemas') {
-            const { schemas } = require(path.join(__dirname, dirent.name, fileName));
-            imports.schemas.push(...schemas);
+          if (fileName === SCHEMA) {
+            const { typeDefs } = require(path.join(__dirname, dirent.name, fileName));
+            imports.typeDefs.push(...typeDefs);
           }
-          if (fileName === 'resolvers') {
+          if (fileName === RESOLVERS) {
             const resolvers = require(path.join(__dirname, dirent.name, fileName));
             merge(imports.resolvers, resolvers);
           }
-          if (fileName === 'middlewares') {
+          if (fileName === MIDDLEWARES) {
             const middlewares = require(path.join(__dirname, dirent.name, fileName));
             merge(imports.middlewares, middlewares);
           }
@@ -25,5 +29,5 @@ exports.importEverything = () =>
       }
       return imports;
     },
-    { schemas: [], resolvers: {}, middlewares: {} }
+    { typeDefs: [], resolvers: {}, middlewares: {} }
   );

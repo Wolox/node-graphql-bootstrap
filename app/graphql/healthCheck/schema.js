@@ -6,4 +6,4 @@ const rootTpyes = gql`
   }
 `;
 
-exports.schemas = [rootTpyes];
+exports.typeDefs = [rootTpyes];
