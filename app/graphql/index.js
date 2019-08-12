@@ -1,9 +1,9 @@
 const { makeExecutableSchema } = require('graphql-tools'),
   { applyMiddleware } = require('graphql-middleware'),
   { gql } = require('apollo-server'),
-  { importEverything } = require('./scripts');
+  { importModules } = require('./scripts');
 
-const modules = importEverything();
+const modules = importModules();
 
 const rootTypeDefinition = gql`
   type Query
@@ -16,6 +16,4 @@ const schema = makeExecutableSchema({
   resolvers: modules.resolvers
 });
 
-module.exports = applyMiddleware(schema, {
-  ...modules.middlewares
-});
+module.exports = applyMiddleware(schema, modules.middlewares);
