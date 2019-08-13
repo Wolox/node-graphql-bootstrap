@@ -9,20 +9,16 @@ This bootstrap operates under the following structure for implementing the ```gr
 - app/graphql/
   + index.js
   + scripts.js
-  + types.js
-  + inputs.js
   + module1
   + module2
   + ...modulex
 
-Each module should be a folder containing the following files if needed:
+Each module should be a folder containing the following:
 
 - app/graphql/modulex/
-  + queries.js
-  + mutations.js
-  + subscriptions.js
-  + resolvers.js (in this file you must export the `fieldResolvers` object if you want to use field resolvers)
-  + middlewares.js
+  + type_defs.js (or schema.js)
+  + resolvers.js
+  + middlewares.js (add it if you need to use middlewares)
 
 ## First steps
 
