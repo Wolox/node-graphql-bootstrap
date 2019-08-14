@@ -14,7 +14,7 @@ exports.importModules = () =>
         fs.readdirSync(path.join(__dirname, dirent.name)).forEach(file => {
           const fileName = file.replace(/.js/gi, '');
           if (fileName === SCHEMA || fileName === TYPE_DEFS) {
-            const { typeDefs } = require(path.join(__dirname, dirent.name, fileName));
+            const { typeDefs = [] } = require(path.join(__dirname, dirent.name, fileName));
             imports.typeDefs.push(...typeDefs);
           }
           if (fileName === RESOLVERS) {
