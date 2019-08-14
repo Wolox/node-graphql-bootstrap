@@ -1,9 +1,10 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
+const albumsApiConfig = require('../../config').common.albumsApi;
 
-module.exports = class AlbumApi extends RESTDataSource {
+class AlbumsApi extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = 'https://jsonplaceholder.typicode.com/';
+    this.baseURL = albumsApiConfig.endpoint;
   }
 
   getAlbum(id) {
@@ -13,4 +14,8 @@ module.exports = class AlbumApi extends RESTDataSource {
   getPhotos(params) {
     return this.get('photos', params);
   }
+}
+
+module.exports = {
+  AlbumsApi
 };
