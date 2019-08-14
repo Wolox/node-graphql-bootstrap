@@ -2,7 +2,8 @@ const { gql } = require('apollo-server');
 
 const rootTypes = gql`
   extend type Query {
-    album(id: ID): Album!
+    album(id: ID!): Album!
+    photos(id: ID!): Photos!
   }
 `;
 

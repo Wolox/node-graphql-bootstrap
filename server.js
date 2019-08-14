@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server'),
+  { RedisCache } = require('apollo-server-cache-redis'),
   config = require('./config'),
   migrationsManager = require('./migrations'),
   logger = require('./app/logger'),
@@ -17,6 +18,9 @@ migrationsManager
     }); */
     new ApolloServer({
       schema,
+      cache: new RedisCache({
+        host: 'localhost'
+      }),
       dataSources: () => ({
         albumsApi: new AlbumsApi()
       })
