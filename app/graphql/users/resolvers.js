@@ -11,7 +11,7 @@ const logIn = (_, { credentials }) => {
   return {
     accessToken: 'example_token',
     refreshToken: 'example_refresh_token',
-    expiresIn: 134567899123
+    expiresIn: 1565990270
   };
 };
 

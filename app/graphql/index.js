@@ -1,7 +1,7 @@
 const { makeExecutableSchema } = require('graphql-tools'),
   { applyMiddleware } = require('graphql-middleware'),
   { gql } = require('apollo-server'),
-  { importModules } = require('./scripts');
+  { importModules } = require('./schema_import');
 
 const modules = importModules();
 
