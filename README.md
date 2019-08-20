@@ -2,6 +2,24 @@
 
 graphql
 
+## Usage
+
+This bootstrap operates under the following structure for implementing the ```graphql``` schema modularly:
+
+- app/graphql/
+  + index.js
+  + scripts.js
+  + module1
+  + module2
+  + ...modulex
+
+Each module should be a folder containing the following:
+
+- app/graphql/modulex/
+  + type_defs.js (or schema.js)
+  + resolvers.js
+  + middlewares.js (add it if you need to use middlewares)
+
 ## First steps
 
 #### Installing node
