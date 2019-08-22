@@ -6,9 +6,9 @@ const { makeExecutableSchema } = require('graphql-tools'),
 const modules = importModules();
 
 const rootTypeDefinition = gql`
-  type Query
-  type Mutation
-  type Subscription
+  ${modules.resolvers.Query ? 'type Query' : ''}
+  ${modules.resolvers.Mutation ? 'type Mutation' : ''}
+  ${modules.resolvers.Subscription ? 'type Subscription' : ''}
 `;
 const typeDefs = [rootTypeDefinition, ...modules.typeDefs];
 const schema = makeExecutableSchema({
