@@ -1,44 +1,25 @@
 const { get } = require('axios');
 
-const { findInCache, updateCache } = require('../helpers/cache'),
+const { init } = require('../helpers/cache'),
   { filterAndFormat } = require('../helpers/albums'),
   { url } = require('../../config').common.albumApi;
 
+const getter = ({ endpoint }) => get(endpoint).then(response => response.data);
+
+const cache = init(getter);
+
 exports.getAlbum = id => {
   const endpoint = `${url}albums/${id}`;
-  return findInCache(endpoint).then(
-    cachedInfo =>
-      cachedInfo ||
-      get(endpoint).then(response => {
-        updateCache(endpoint, response.data);
-        return response.data;
-      })
-  );
+  return cache.load({ endpoint });
 };
 
 exports.getAllAlbums = options => {
   const endpoint = `${url}albums`;
-  return findInCache(endpoint)
-    .then(
-      cachedInfo =>
-        cachedInfo ||
-        get(endpoint).then(response => {
-          updateCache(endpoint, response.data);
-          return response.data;
-        })
-    )
-    .then(albums => filterAndFormat(albums, options));
+  return cache.load({ endpoint }).then(albums => filterAndFormat(albums, options));
 };
 
 exports.getPhotosOfAlbum = albumId => {
   const query = `?albumId=${albumId}`;
   const endpoint = `${url}photos${query}`;
-  return findInCache(endpoint).then(
-    cachedInfo =>
-      cachedInfo ||
-      get(endpoint).then(response => {
-        updateCache(endpoint, response.data);
-        return response.data;
-      })
-  );
+  return cache.load({ endpoint });
 };
