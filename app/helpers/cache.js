@@ -6,8 +6,6 @@ const logger = require('../logger');
 
 const cache = new RedisCache({
   host: config.host,
-  port: config.port,
-  db: config.name,
   maxRetriesPerRequest: 1
 });
 

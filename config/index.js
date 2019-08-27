@@ -50,7 +50,7 @@ const config = {
       url: process.env.URL_API
     },
     redisCache: {
-      host: process.env.REDIS_HOST,
+      host: process.env.REDIS_URL,
       port: process.env.REDIS_PORT,
       name: process.env.REDIS_NAME
     }
