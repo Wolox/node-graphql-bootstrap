@@ -6,7 +6,7 @@ const logger = require('../logger');
 
 const cache = new RedisCache({
   host: config.host,
-  maxRetriesPerRequest: 1
+  maxRetriesPerRequest: 2
 });
 
 const createCacheKey = stringKey => {
@@ -48,7 +48,7 @@ exports.init = (func, options) => ({
         cachedInfo =>
           cachedInfo ||
           func(params).then(response => {
-            updateCache(stringKey, response, serialize);
+            updateCache(stringKey, response, serialize).catch(e => logger.error(e.message));
             return response;
           })
       );
