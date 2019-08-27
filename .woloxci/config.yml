@@ -21,3 +21,7 @@ environment:
   GIT_COMMITTER_EMAIL: b
   LANG: C.UTF-8
   SECRET_KEY: secret_key
+  URL_API: https://jsonplaceholder.typicode.com/
+  REDIS_NAME: 1
+  REDIS_NAME_DEV: 2
+  REDIS_NAME_TEST: 3
