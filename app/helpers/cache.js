@@ -4,7 +4,12 @@ const { createHash } = require('crypto');
 const config = require('../../config').common.redisCache;
 const logger = require('../logger');
 
-const cache = new RedisCache();
+const cache = new RedisCache({
+  host: config.host,
+  port: config.port,
+  db: config.name,
+  maxRetriesPerRequest: 1
+});
 
 const createCacheKey = stringKey => {
   const hashedKey = createHash('sha256')
