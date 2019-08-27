@@ -48,6 +48,7 @@ exports.init = (func, options) => ({
         cachedInfo =>
           cachedInfo ||
           func(params).then(response => {
+            console.log(config.host);
             updateCache(stringKey, response, serialize).catch(e => logger.error(e.message));
             return response;
           })
