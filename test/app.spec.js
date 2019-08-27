@@ -16,6 +16,8 @@ const truncateDatabase = () => Promise.all(tables.map(truncateTable));
 
 const flushRedis = redisClient =>
   new Promise(resolve => {
+    console.log(host);
+    console.log(port);
     redisClient.sendCommand('FLUSHALL');
     redisClient.quit();
     resolve();
