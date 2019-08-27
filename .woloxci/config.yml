@@ -13,11 +13,6 @@ steps:
     - node_modules/.bin/sequelize db:migrate
   lint:
     - npm run lint
-  checkScema:
-    - npm run start-service
-    - npx apollo service:check
-    - npx apollo service:push
-    - npm run stop-service
   test:
     - npm run test
 
