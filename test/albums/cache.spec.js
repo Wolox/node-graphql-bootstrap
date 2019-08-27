@@ -23,7 +23,7 @@ describe('albums', () => {
           const hrstartCached = moment();
           return query(getAlbum(fakeAlbums[0].id)).then(() => {
             const hrendCached = moment().diff(hrstartCached);
-            return expect(hrendNoCached - hrendCached).toBeGreaterThan(100);
+            expect(hrendNoCached - hrendCached).toBeGreaterThan(100);
           });
         });
       });

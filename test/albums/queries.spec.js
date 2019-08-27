@@ -19,7 +19,7 @@ describe('albums', () => {
         query(getAlbum(fakeAlbums[0].id))
           .then(res => {
             console.log(JSON.stringify(res));
-            return expect(res.data).toEqual({
+            expect(res.data).toEqual({
               album: {
                 id: fakeAlbums[0].id,
                 title: fakeAlbums[0].title,
@@ -29,25 +29,25 @@ describe('albums', () => {
           })
           .then(() =>
             query(getAlbum(fakeAlbums[1].id))
-              .then(res =>
+              .then(res => {
                 expect(res.data).toEqual({
                   album: {
                     id: fakeAlbums[1].id,
                     title: fakeAlbums[1].title,
                     photos: fakePhotos
                   }
-                })
-              )
+                });
+              })
               .then(() =>
-                query(getAlbum(fakeAlbums[2].id)).then(res =>
+                query(getAlbum(fakeAlbums[2].id)).then(res => {
                   expect(res.data).toEqual({
                     album: {
                       id: fakeAlbums[2].id,
                       title: fakeAlbums[2].title,
                       photos: fakePhotos
                     }
-                  })
-                )
+                  });
+                })
               )
           )
       );
@@ -63,14 +63,18 @@ describe('albums', () => {
       });
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbums())
-          .then(res => expect(res.data.albums).toHaveLength(5))
+          .then(res => {
+            expect(res.data.albums).toHaveLength(5);
+          })
           .then(() =>
             query(getAlbumsWithOffset(0, 3))
-              .then(res => expect(res.data.albums).toHaveLength(3))
+              .then(res => {
+                expect(res.data.albums).toHaveLength(3);
+              })
               .then(() =>
                 query(getAlbumsWithFilter(fakeAlbums[2].title)).then(res => {
                   expect(res.data.albums).toHaveLength(1);
-                  return expect(res.data.albums[0]).toEqual({
+                  expect(res.data.albums[0]).toEqual({
                     id: fakeAlbums[2].id,
                     title: fakeAlbums[2].title,
                     photos: fakePhotos
