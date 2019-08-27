@@ -5,8 +5,8 @@ const { query } = require('../server.spec'),
   axios = require('axios');
 
 describe('albums', () => {
-  describe('queries', async () => {
-    await it('should get album properly', () => {
+  describe('queries', () => {
+    it('should get album properly', () => {
       const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
         axios.setMockAlbums(fakeAlbumsToMock);
         return fakeAlbumsToMock;
@@ -52,7 +52,7 @@ describe('albums', () => {
           )
       );
     });
-    await it('should get all albums properly', () => {
+    it('should get all albums properly', () => {
       const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
         axios.setMockAlbums(fakeAlbumsToMock);
         return fakeAlbumsToMock;
