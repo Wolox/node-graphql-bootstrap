@@ -6,7 +6,7 @@ const logger = require('../logger');
 
 const cache = new RedisCache({
   host: config.host,
-  maxRetriesPerRequest: 2
+  maxRetriesPerRequest: null
 });
 
 const createCacheKey = stringKey => {
