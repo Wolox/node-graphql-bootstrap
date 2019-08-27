@@ -62,7 +62,10 @@ describe('albums', () => {
       });
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbums())
-          .then(res => expect(res.data.albums).toHaveLength(5))
+          .then(res => {
+            console.log(res.errors);
+            return expect(res.data.albums).toHaveLength(5);
+          })
           .then(() =>
             query(getAlbumsWithOffset(0, 3))
               .then(res => expect(res.data.albums).toHaveLength(3))
