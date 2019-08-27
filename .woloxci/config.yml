@@ -4,6 +4,7 @@ config:
 
 services:
   - postgres
+  - redis
 
 steps:
   copy_node_modules:
