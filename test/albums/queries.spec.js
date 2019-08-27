@@ -18,7 +18,8 @@ describe('albums', () => {
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbum(fakeAlbums[0].id))
           .then(res => {
-            expect(res.data).toEqual({
+            console.log(JSON.stringify(res));
+            return expect(res.data).toEqual({
               album: {
                 id: fakeAlbums[0].id,
                 title: fakeAlbums[0].title,
