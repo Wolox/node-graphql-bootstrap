@@ -2,6 +2,7 @@ const { RedisCache } = require('apollo-server-cache-redis');
 const { createHash } = require('crypto');
 
 const config = require('../../config').common.redisCache;
+const logger = require('../logger');
 
 const cache = new RedisCache({
   host: config.host,
@@ -41,7 +42,10 @@ exports.init = (func, options) => ({
     const serialize = options && options.serializer;
     const deserialize = options && options.deserializer;
     return findInCache(stringKey, deserialize)
-      .catch(() => undefined)
+      .catch(e => {
+        logger.error(e.message);
+        return undefined;
+      })
       .then(
         cachedInfo =>
           cachedInfo ||
