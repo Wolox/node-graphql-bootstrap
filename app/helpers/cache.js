@@ -6,7 +6,8 @@ const config = require('../../config').common.redisCache;
 const cache = new RedisCache({
   host: config.host,
   port: config.port,
-  db: config.name
+  db: config.name,
+  maxRetriesPerRequest: 1
 });
 
 const createCacheKey = stringKey => {
@@ -39,13 +40,15 @@ exports.init = (func, options) => ({
     const stringKey = JSON.stringify(params);
     const serialize = options && options.serializer;
     const deserialize = options && options.deserializer;
-    return findInCache(stringKey, deserialize).then(
-      cachedInfo =>
-        cachedInfo ||
-        func(params).then(response => {
-          updateCache(stringKey, response, serialize);
-          return response;
-        })
-    );
+    return findInCache(stringKey, deserialize)
+      .catch(() => undefined)
+      .then(
+        cachedInfo =>
+          cachedInfo ||
+          func(params).then(response => {
+            updateCache(stringKey, response, serialize);
+            return response;
+          })
+      );
   }
 });

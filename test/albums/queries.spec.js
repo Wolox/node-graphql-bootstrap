@@ -5,21 +5,20 @@ const { query } = require('../server.spec'),
   axios = require('axios');
 
 describe('albums', () => {
-  describe('queries', () => {
-    it('should get album properly', () => {
+  describe('queries', async () => {
+    await it('should get album properly', () => {
       const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
         axios.setMockAlbums(fakeAlbumsToMock);
         return fakeAlbumsToMock;
       });
-      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 1).then(fakePhotosToMock => {
+      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 2).then(fakePhotosToMock => {
         axios.setMockPhotos(fakePhotosToMock);
         return fakePhotosToMock;
       });
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbum(fakeAlbums[0].id))
           .then(res => {
-            console.log(JSON.stringify(res.errors));
-            return expect(res.data).toEqual({
+            expect(res.data).toEqual({
               album: {
                 id: fakeAlbums[0].id,
                 title: fakeAlbums[0].title,
@@ -52,21 +51,18 @@ describe('albums', () => {
           )
       );
     });
-    it('should get all albums properly', () => {
+    await it('should get all albums properly', () => {
       const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
         axios.setMockAlbums(fakeAlbumsToMock);
         return fakeAlbumsToMock;
       });
-      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 1).then(fakePhotosToMock => {
+      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 3).then(fakePhotosToMock => {
         axios.setMockPhotos(fakePhotosToMock);
         return fakePhotosToMock;
       });
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbums())
-          .then(res => {
-            console.log(JSON.stringify(res.errors));
-            return expect(res.data.albums).toHaveLength(5);
-          })
+          .then(res => expect(res.data.albums).toHaveLength(5))
           .then(() =>
             query(getAlbumsWithOffset(0, 3))
               .then(res => expect(res.data.albums).toHaveLength(3))

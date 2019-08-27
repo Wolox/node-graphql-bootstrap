@@ -23,7 +23,7 @@ function get(url) {
         resolve({
           data: mockResponse[urlParsed.pathname]
         }),
-      100
+      200
     );
   });
 }
