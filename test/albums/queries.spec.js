@@ -60,18 +60,24 @@ describe('albums', () => {
         axios.setMockPhotos(fakePhotosToMock);
         return fakePhotosToMock;
       });
-      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) => {
-        query(getAlbums()).then(res => expect(res.data.albums).toHaveLength(5));
-        query(getAlbumsWithOffset(0, 3)).then(res => expect(res.data.albums).toHaveLength(3));
-        query(getAlbumsWithFilter(fakeAlbums[2].title)).then(res => {
-          expect(res.data.albums).toHaveLength(1);
-          expect(res.data.albums[0]).toEqual({
-            id: fakeAlbums[2].id,
-            title: fakeAlbums[2].title,
-            photos: fakePhotos
-          });
-        });
-      });
+      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
+        query(getAlbums())
+          .then(res => expect(res.data.albums).toHaveLength(5))
+          .then(() =>
+            query(getAlbumsWithOffset(0, 3))
+              .then(res => expect(res.data.albums).toHaveLength(3))
+              .then(() =>
+                query(getAlbumsWithFilter(fakeAlbums[2].title)).then(res => {
+                  expect(res.data.albums).toHaveLength(1);
+                  return expect(res.data.albums[0]).toEqual({
+                    id: fakeAlbums[2].id,
+                    title: fakeAlbums[2].title,
+                    photos: fakePhotos
+                  });
+                })
+              )
+          )
+      );
     });
   });
 });
