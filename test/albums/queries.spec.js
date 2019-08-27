@@ -63,7 +63,7 @@ describe('albums', () => {
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) =>
         query(getAlbums())
           .then(res => {
-            console.log(res.errors);
+            console.log(JSON.stringify(res.errors));
             return expect(res.data.albums).toHaveLength(5);
           })
           .then(() =>
