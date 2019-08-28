@@ -6,7 +6,7 @@ const { query } = require('../server.spec'),
 
 describe('albums', () => {
   describe('queries', () => {
-    it('should get album properly', () => {
+    test('should get album properly', () => {
       const fakeAlbumsProm = albumFactory
         .createManyFakeAlbums(5)
         .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
@@ -45,7 +45,7 @@ describe('albums', () => {
         });
       });
     });
-    it('should get all albums properly', () => {
+    test('should get all albums properly', () => {
       const fakeAlbumsProm = albumFactory
         .createManyFakeAlbums(5)
         .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
