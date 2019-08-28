@@ -6,69 +6,66 @@ const { query } = require('../server.spec'),
 
 describe('albums', () => {
   describe('queries', () => {
+    let fakeAlbumsToMock = undefined;
+    let fakePhotosToMock = undefined;
+    let cont = 0;
+
+    beforeEach(async done => {
+      fakeAlbumsToMock = await albumFactory.createManyFakeAlbums(5);
+      const mockAlbumsProm = axios.setMockAlbums(fakeAlbumsToMock);
+      fakePhotosToMock = await photoFactory.createManyFakePhotos(5, cont);
+      const mockPhotosProm = axios.setMockPhotos(fakePhotosToMock);
+      cont += 1;
+      Promise.all([mockAlbumsProm, mockPhotosProm]).then(done());
+    });
+
     test('should get album properly', () => {
-      const fakeAlbumsProm = albumFactory
-        .createManyFakeAlbums(5)
-        .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
-      const fakePhotosProm = photoFactory
-        .createManyFakePhotos(5, 2)
-        .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
-      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) => {
-        const queryProm0 = query(getAlbum(fakeAlbums[0].id));
-        const queryProm1 = query(getAlbum(fakeAlbums[1].id));
-        const queryProm2 = query(getAlbum(fakeAlbums[2].id));
-        return Promise.all([queryProm0, queryProm1, queryProm2]).then(([resQuery0, resQuery1, resQuery2]) => {
-          expect(resQuery0).not.toEqual(resQuery1);
-          expect(resQuery0).not.toEqual(resQuery2);
-          expect(resQuery1).not.toEqual(resQuery2);
-          expect(resQuery0.data).toEqual({
-            album: {
-              id: fakeAlbums[0].id,
-              title: fakeAlbums[0].title,
-              photos: fakePhotos
-            }
-          });
-          expect(resQuery1.data).toEqual({
-            album: {
-              id: fakeAlbums[1].id,
-              title: fakeAlbums[1].title,
-              photos: fakePhotos
-            }
-          });
-          expect(resQuery2.data).toEqual({
-            album: {
-              id: fakeAlbums[2].id,
-              title: fakeAlbums[2].title,
-              photos: fakePhotos
-            }
-          });
+      const queryProm0 = query(getAlbum(fakeAlbumsToMock[0].id));
+      const queryProm1 = query(getAlbum(fakeAlbumsToMock[1].id));
+      const queryProm2 = query(getAlbum(fakeAlbumsToMock[2].id));
+      return Promise.all([queryProm0, queryProm1, queryProm2]).then(([resQuery0, resQuery1, resQuery2]) => {
+        expect(resQuery0).not.toEqual(resQuery1);
+        expect(resQuery0).not.toEqual(resQuery2);
+        expect(resQuery1).not.toEqual(resQuery2);
+        expect(resQuery0.data).toEqual({
+          album: {
+            id: fakeAlbumsToMock[0].id,
+            title: fakeAlbumsToMock[0].title,
+            photos: fakePhotosToMock
+          }
+        });
+        expect(resQuery1.data).toEqual({
+          album: {
+            id: fakeAlbumsToMock[1].id,
+            title: fakeAlbumsToMock[1].title,
+            photos: fakePhotosToMock
+          }
+        });
+        expect(resQuery2.data).toEqual({
+          album: {
+            id: fakeAlbumsToMock[2].id,
+            title: fakeAlbumsToMock[2].title,
+            photos: fakePhotosToMock
+          }
         });
       });
     });
     test('should get all albums properly', () => {
-      const fakeAlbumsProm = albumFactory
-        .createManyFakeAlbums(5)
-        .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
-      const fakePhotosProm = photoFactory
-        .createManyFakePhotos(5, 3)
-        .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
-      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) => {
-        const queryAllAlbumsProm = query(getAlbums());
-        const querySlicedAlbumsProm = query(getAlbumsWithOffset(0, 3));
-        const queryFilterAlbumsProm = query(getAlbumsWithFilter(fakeAlbums[2].title));
-        return Promise.all([queryAllAlbumsProm, querySlicedAlbumsProm, queryFilterAlbumsProm]).then(
-          ([resAllAlbums, resSliceAlbums, resFilterAlbums]) => {
-            expect(resAllAlbums.data.albums).toHaveLength(5);
-            expect(resSliceAlbums.data.albums).toHaveLength(3);
-            expect(resFilterAlbums.data.albums).toHaveLength(1);
-            expect(resFilterAlbums.data.albums[0]).toEqual({
-              id: fakeAlbums[2].id,
-              title: fakeAlbums[2].title,
-              photos: fakePhotos
-            });
-          }
-        );
-      });
+      const queryAllAlbumsProm = query(getAlbums());
+      const querySlicedAlbumsProm = query(getAlbumsWithOffset(0, 3));
+      const queryFilterAlbumsProm = query(getAlbumsWithFilter(fakeAlbumsToMock[2].title));
+      return Promise.all([queryAllAlbumsProm, querySlicedAlbumsProm, queryFilterAlbumsProm]).then(
+        ([resAllAlbums, resSliceAlbums, resFilterAlbums]) => {
+          expect(resAllAlbums.data.albums).toHaveLength(5);
+          expect(resSliceAlbums.data.albums).toHaveLength(3);
+          expect(resFilterAlbums.data.albums).toHaveLength(1);
+          expect(resFilterAlbums.data.albums[0]).toEqual({
+            id: fakeAlbumsToMock[2].id,
+            title: fakeAlbumsToMock[2].title,
+            photos: fakePhotosToMock
+          });
+        }
+      );
     });
   });
 });

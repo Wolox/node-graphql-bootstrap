@@ -7,12 +7,18 @@ const { query } = require('../server.spec'),
 
 describe('albums', () => {
   describe('queries', () => {
-    test('testing cache', async () => {
-      jest.setTimeout(30000);
-      const fakeAlbumsToMock = await albumFactory.createManyFakeAlbums(3);
+    let fakeAlbumsToMock = undefined;
+    let fakePhotosToMock = undefined;
+
+    beforeEach(async done => {
+      fakeAlbumsToMock = await albumFactory.createManyFakeAlbums(3);
       await axios.setMockAlbums(fakeAlbumsToMock);
-      const fakePhotosToMock = await photoFactory.createManyFakePhotos(5, 1);
+      fakePhotosToMock = await photoFactory.createManyFakePhotos(5, 1);
       await axios.setMockPhotos(fakePhotosToMock);
+      done();
+    });
+    test('testing cache', () => {
+      jest.setTimeout(30000);
       const hrstartNoChached = moment();
       return query(getAlbum(fakeAlbumsToMock[0].id)).then(() => {
         const hrendNoCached = moment().diff(hrstartNoChached);
