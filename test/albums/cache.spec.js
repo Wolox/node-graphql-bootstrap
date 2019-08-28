@@ -14,12 +14,12 @@ describe('albums', () => {
       const fakePhotosProm = photoFactory
         .createManyFakePhotos(5, 1)
         .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
-      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums]) => {
+      return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(async ([fakeAlbums]) => {
         const hrstartNoChached = moment();
-        query(getAlbum(fakeAlbums[0].id));
+        await query(getAlbum(fakeAlbums[0].id));
         const hrendNoCached = moment().diff(hrstartNoChached);
         const hrstartCached = moment();
-        query(getAlbum(fakeAlbums[0].id));
+        await query(getAlbum(fakeAlbums[0].id));
         const hrendCached = moment().diff(hrstartCached);
         return expect(hrendNoCached - hrendCached).toBeGreaterThan(100);
       });
