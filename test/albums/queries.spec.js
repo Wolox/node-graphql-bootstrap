@@ -7,14 +7,12 @@ const { query } = require('../server.spec'),
 describe('albums', () => {
   describe('queries', () => {
     it('should get album properly', () => {
-      const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
-        axios.setMockAlbums(fakeAlbumsToMock);
-        return fakeAlbumsToMock;
-      });
-      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 2).then(fakePhotosToMock => {
-        axios.setMockPhotos(fakePhotosToMock);
-        return fakePhotosToMock;
-      });
+      const fakeAlbumsProm = albumFactory
+        .createManyFakeAlbums(5)
+        .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
+      const fakePhotosProm = photoFactory
+        .createManyFakePhotos(5, 2)
+        .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) => {
         const queryProm0 = query(getAlbum(fakeAlbums[0].id));
         const queryProm1 = query(getAlbum(fakeAlbums[1].id));
@@ -48,14 +46,12 @@ describe('albums', () => {
       });
     });
     it('should get all albums properly', () => {
-      const fakeAlbumsProm = albumFactory.createManyFakeAlbums(5).then(fakeAlbumsToMock => {
-        axios.setMockAlbums(fakeAlbumsToMock);
-        return fakeAlbumsToMock;
-      });
-      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 3).then(fakePhotosToMock => {
-        axios.setMockPhotos(fakePhotosToMock);
-        return fakePhotosToMock;
-      });
+      const fakeAlbumsProm = albumFactory
+        .createManyFakeAlbums(5)
+        .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
+      const fakePhotosProm = photoFactory
+        .createManyFakePhotos(5, 3)
+        .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums, fakePhotos]) => {
         const queryAllAlbumsProm = query(getAlbums());
         const querySlicedAlbumsProm = query(getAlbumsWithOffset(0, 3));

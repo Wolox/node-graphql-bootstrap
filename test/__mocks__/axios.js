@@ -9,19 +9,23 @@ function setMockAlbums(albums) {
   albums.forEach(album => {
     mockResponse[`/albums/${album.id}`] = album;
   });
+  return Promise.resolve(albums);
 }
 
 function setMockPhotos(photos) {
   mockResponse['/photos'] = photos;
+  return Promise.resolve(photos);
 }
 
 function get(url) {
   const urlParsed = urlParse(url);
   return new Promise(resolve => {
-    setTimeout(() =>
-      resolve({
-        data: mockResponse[urlParsed.pathname]
-      })
+    setTimeout(
+      () =>
+        resolve({
+          data: mockResponse[urlParsed.pathname]
+        }),
+      200
     );
   });
 }

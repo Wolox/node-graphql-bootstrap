@@ -8,24 +8,20 @@ const { query } = require('../server.spec'),
 describe('albums', () => {
   describe('queries', () => {
     it('testing cache', () => {
-      const fakeAlbumsProm = albumFactory.createManyFakeAlbums(3).then(fakeAlbumsToMock => {
-        axios.setMockAlbums(fakeAlbumsToMock);
-        return fakeAlbumsToMock;
-      });
-      const fakePhotosProm = photoFactory.createManyFakePhotos(5, 1).then(fakePhotosToMock => {
-        axios.setMockPhotos(fakePhotosToMock);
-        return fakePhotosToMock;
-      });
+      const fakeAlbumsProm = albumFactory
+        .createManyFakeAlbums(3)
+        .then(fakeAlbumsToMock => axios.setMockAlbums(fakeAlbumsToMock).then(() => fakeAlbumsToMock));
+      const fakePhotosProm = photoFactory
+        .createManyFakePhotos(5, 1)
+        .then(fakePhotosToMock => axios.setMockPhotos(fakePhotosToMock).then(() => fakePhotosToMock));
       return Promise.all([fakeAlbumsProm, fakePhotosProm]).then(([fakeAlbums]) => {
         const hrstartNoChached = moment();
-        return query(getAlbum(fakeAlbums[0].id)).then(() => {
-          const hrendNoCached = moment().diff(hrstartNoChached);
-          const hrstartCached = moment();
-          return query(getAlbum(fakeAlbums[0].id)).then(() => {
-            const hrendCached = moment().diff(hrstartCached);
-            expect(hrendNoCached - hrendCached).toBeGreaterThan(100);
-          });
-        });
+        query(getAlbum(fakeAlbums[0].id));
+        const hrendNoCached = moment().diff(hrstartNoChached);
+        const hrstartCached = moment();
+        query(getAlbum(fakeAlbums[0].id));
+        const hrendCached = moment().diff(hrstartCached);
+        return expect(hrendNoCached - hrendCached).toBeGreaterThan(100);
       });
     });
   });
