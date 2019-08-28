@@ -22,6 +22,7 @@ environment:
   LANG: C.UTF-8
   SECRET_KEY: secret_key
   URL_API: https://jsonplaceholder.typicode.com/
+  REDIS_URL: redis://redis
   REDIS_NAME: 1
   REDIS_NAME_DEV: 2
   REDIS_NAME_TEST: 3
