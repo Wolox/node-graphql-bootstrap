@@ -18,12 +18,10 @@ function setMockPhotos(photos) {
 function get(url) {
   const urlParsed = urlParse(url);
   return new Promise(resolve => {
-    setTimeout(
-      () =>
-        resolve({
-          data: mockResponse[urlParsed.pathname]
-        }),
-      200
+    setTimeout(() =>
+      resolve({
+        data: mockResponse[urlParsed.pathname]
+      })
     );
   });
 }
