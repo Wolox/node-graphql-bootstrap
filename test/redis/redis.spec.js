@@ -22,11 +22,11 @@ describe('redis', () => {
       .then(
         cache
           .get('keyTest')
+          .then(value => expect(value).toEqual('TEST'))
           .catch(error => {
             console.log(error);
             return expect(typeof error).toEqual(undefined);
           })
-          .then(value => expect(value).toEqual('TEST'))
       )
       .catch(error => {
         console.log(error);
