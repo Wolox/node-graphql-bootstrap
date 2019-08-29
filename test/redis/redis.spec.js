@@ -1,15 +1,16 @@
 const { RedisCache } = require('apollo-server-cache-redis');
+const Redis = require('ioredis');
 
 const config = require('../../config').common.redisCache;
 
-const cache = new RedisCache({
-  host: config.host,
-  db: config.name,
-  maxRetriesPerRequest: 20
-});
 describe('redis', () => {
-  test.only('connection', () =>
-    cache
+  test('connection redisCache', () => {
+    const cache = new RedisCache({
+      host: config.host,
+      db: config.name,
+      maxRetriesPerRequest: 2
+    });
+    return cache
       .set('keyTest', 'TEST')
       .then(() =>
         cache
@@ -23,5 +24,28 @@ describe('redis', () => {
       .catch(error => {
         console.log(error);
         return expect(typeof error).toEqual(undefined);
-      }));
+      });
+  });
+  test.only('connection redis', () => {
+    const cache = new Redis({
+      host: config.host,
+      db: config.name,
+      maxRetriesPerRequest: 2
+    });
+    return cache
+      .set('keyTest', 'TEST')
+      .then(() =>
+        cache
+          .get('keyTest')
+          .then(value => expect(value).toEqual('TEST'))
+          .catch(error => {
+            console.log(error);
+            return expect(typeof error).toEqual(undefined);
+          })
+      )
+      .catch(error => {
+        console.log(error);
+        return expect(typeof error).toEqual(undefined);
+      });
+  });
 });
