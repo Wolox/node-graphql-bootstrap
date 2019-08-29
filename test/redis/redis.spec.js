@@ -6,7 +6,7 @@ const config = require('../../config').common.redisCache;
 describe('redis', () => {
   test('connection redisCache', () => {
     const cache = new RedisCache({
-      host: config.host,
+      // host: config.host,
       db: config.name,
       maxRetriesPerRequest: 2
     });
