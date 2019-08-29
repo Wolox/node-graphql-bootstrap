@@ -5,21 +5,13 @@ const config = require('../../config').common.redisCache;
 const cache = new RedisCache({
   host: config.host,
   db: config.name,
-  maxRetriesPerRequest: 2,
-  reconnectOnError: err => {
-    const targetError = 'READONLY';
-    if (err.message.slice(0, targetError.length) === targetError) {
-      // Only reconnect when the error starts with "READONLY"
-      return true;
-    }
-    return false;
-  }
+  maxRetriesPerRequest: 20
 });
 describe('redis', () => {
   test.only('connection', () =>
     cache
       .set('keyTest', 'TEST')
-      .then(
+      .then(() =>
         cache
           .get('keyTest')
           .then(value => expect(value).toEqual('TEST'))
