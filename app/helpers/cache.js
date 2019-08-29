@@ -7,7 +7,16 @@ const logger = require('../logger');
 const cache = new RedisCache({
   host: config.host,
   db: config.name,
-  maxRetriesPerRequest: 2
+  maxRetriesPerRequest: 2,
+  reconnectOnError: err => {
+    console.log(err);
+    const targetError = 'READONLY';
+    if (err.message.slice(0, targetError.length) === targetError) {
+      // Only reconnect when the error starts with "READONLY"
+      return true;
+    }
+    return false;
+  }
 });
 
 const createCacheKey = stringKey => {
