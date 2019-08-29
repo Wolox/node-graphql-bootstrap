@@ -6,7 +6,7 @@ const { query } = require('../server.spec'),
   moment = require('moment');
 
 describe('albums', () => {
-  describe('queries', () => {
+  describe.skip('queries', () => {
     let fakeAlbumsToMock = undefined;
     let fakePhotosToMock = undefined;
 
