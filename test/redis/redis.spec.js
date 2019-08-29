@@ -7,8 +7,8 @@ describe('redis', () => {
   test('connection redisCache', () => {
     const cache = new RedisCache({
       // host: config.host,
-      db: config.name,
-      maxRetriesPerRequest: 2
+      // db: config.name,
+      // maxRetriesPerRequest: 2
     });
     return cache
       .set('keyTest', 'TEST')
@@ -27,10 +27,12 @@ describe('redis', () => {
       });
   });
   test.only('connection redis', () => {
+    jest.setTimeout(30000);
+    console.log(config.host);
     const cache = new Redis({
-      host: config.host,
-      db: config.name,
-      maxRetriesPerRequest: 2
+      // host: config.host,
+      // db: config.name,
+      // maxRetriesPerRequest: 2
     });
     return cache
       .set('keyTest', 'TEST')
