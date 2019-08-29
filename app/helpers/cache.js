@@ -9,7 +9,6 @@ const cache = new RedisCache({
   db: config.name,
   maxRetriesPerRequest: 2,
   reconnectOnError: err => {
-    console.log(err);
     const targetError = 'READONLY';
     if (err.message.slice(0, targetError.length) === targetError) {
       // Only reconnect when the error starts with "READONLY"
