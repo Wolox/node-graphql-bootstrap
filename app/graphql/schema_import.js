@@ -10,7 +10,6 @@ const MIDDLEWARES = 'middlewares';
 exports.importModules = () =>
   fs.readdirSync(__dirname, { withFileTypes: true }).reduce(
     (imports, dirent) => {
-      console.log(`DIRENT ${dirent}`);
       if (dirent.isDirectory()) {
         fs.readdirSync(path.join(__dirname, dirent.name)).forEach(file => {
           const fileName = file.replace(/.js/gi, '');
