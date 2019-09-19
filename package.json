@@ -1,6 +1,6 @@
 {
   "name": "express-graphql-bootstrap",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "express-graphql-bootstrap",
   "engines": {
     "node": "10.14.1",
