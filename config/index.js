@@ -45,6 +45,11 @@ const config = {
     session: {
       header_name: 'authorization',
       secret: process.env.NODE_API_SESSION_SECRET
+    },
+    redisCache: {
+      host: process.env.REDIS_URL,
+      port: process.env.REDIS_PORT,
+      name: process.env.REDIS_NAME
     }
   }
 };
