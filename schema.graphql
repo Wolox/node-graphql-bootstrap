@@ -1,0 +1,42 @@
+type AccessToken {
+  accessToken: String!
+  refreshToken: String!
+  expiresIn: Int!
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(user: UserInput!): User!
+  login(credentials: LoginInput!): AccessToken
+}
+
+type Query {
+  healthCheck: String!
+  user(id: ID, firstName: String, email: String): User!
+  users: [User]
+}
+
+type Subscription {
+  onLogin: String!
+}
+
+type User {
+  firstName: String!
+  lastName: String!
+  username: String!
+  email: String!
+  password: String!
+  id: ID!
+}
+
+input UserInput {
+  firstName: String!
+  lastName: String!
+  username: String!
+  email: String!
+  password: String!
+}
