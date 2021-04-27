@@ -102,7 +102,7 @@
     "prettier": "^1.15.3",
     "prettier-eslint": "^8.8.2",
     "prompt": "^1.0.0",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "sequelize-cli": "^5.5.0",
     "supertest": "^3.4.2"
   }
