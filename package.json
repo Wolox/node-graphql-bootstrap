@@ -69,7 +69,7 @@
     "lodash.merge": "^4.6.2",
     "pg": "^7.4.1",
     "rollbar": "^2.3.9",
-    "sequelize": "^5.21.4",
+    "sequelize": "^6.28.2",
     "umzug": "^2.1.0"
   },
   "devDependencies": {
